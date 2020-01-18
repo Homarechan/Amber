@@ -1,7 +1,11 @@
 #include "tokenizer.h"
 
+#include "symbols.h"
+
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 Token *appendtoken(Token *   previous,
                    Token *   next,
@@ -15,10 +19,12 @@ Token *appendtoken(Token *   previous,
     new_token->tktype   = tktype;
     new_token->number   = number;
     new_token->length   = length;
-    new_token->string   = (char *)malloc(length);
-    memcpy(new_token->string, string, length);
-    new_token->string[length] = '\0';
 
+    if (string) {
+        new_token->string = (char *)malloc(length);
+        memcpy(new_token->string, string, length);
+        new_token->string[length] = '\0';
+    }
     previous->next = new_token;
 
     return new_token;
@@ -40,18 +46,18 @@ Token *appendtoken_symbol(Token *token, char *src, int pointer) {
 
     if ((binop = getthreesymbol(
            src[pointer], src[pointer + 1], src[pointer + 2])) != TK_Error) {
-        char *tname = token_name[binop];
-        return appendtoken(token, NULL, binop, 3, strlen(tname), tname);
+        char *tname = token_name[(int)binop];
+        return appendtoken(token, NULL, binop, 0, 3, NULL);
     }
     if ((binop = gettwosymbol(src[pointer], src[pointer + 1])) != TK_Error) {
-        char *tname = token_name[binop];
-        return appendtoken(token, NULL, binop, 2, strlen(tname), tname);
+        char *tname = token_name[(int)binop];
+        return appendtoken(token, NULL, binop, 0, 2, NULL);
     }
     if ((binop = getonesymbol(src[pointer])) != TK_Error) {
-        char *tname = token_name[binop];
-        return appendtoken(token, NULL, binop, 1, strlen(tname), tname);
+        char *tname = token_name[(int)binop];
+        return appendtoken(token, NULL, binop, 0, 1, NULL);
     }
-    fprintf(stderr, "panic: Unknown operator\n");
+    fprintf(stderr, "panic: Unknown operator in %d\n", pointer);
     exit(EXIT_FAILURE);
 }
 
@@ -77,22 +83,24 @@ Token *tokenize(char *src, int length) {
     while (1) {
 
         now = src[pointer];
-        printf("%c", now);
 
+        // If space, pass it.
         if (isspace(now)) {
             ++pointer;
             continue;
         }
 
+        // If digit, generate a number token.
         if (isdigit(now)) {
             latest = appendtoken_number(latest, src, pointer);
             pointer += latest->length;
             continue;
         }
 
+        // If symbol, generate a symbol token.
         if (issymbol(now)) {
             latest = appendtoken_symbol(latest, src, pointer);
-            pointer += latest->number;
+            pointer += latest->length;
             continue;
         }
 

@@ -1,12 +1,19 @@
+#include "tokenizer.h"
+#include "tokens.h"
+
 #include <stdio.h>
-#include <tokenizer.h>
+
 
 int main() {
-    char   src[]  = "1 2 3 456 789 + - == >>=";
-    Token *result = tokenize(src, strlen(src));
+    char   src[]  = "1 2 3 456 + --- == += != <<=";
+    Token *result = tokenize(src, 12);
     printf("start\n");
     while (result->tktype != TK_EOF) {
-        printf("%s\n", result->string);
+        if (result->tktype == TK_Number) {
+            printf("%s\n", result->string);
+        } else {
+            printf("%s\n", token_name[result->tktype]);
+        }
         result = result->next;
     }
 }

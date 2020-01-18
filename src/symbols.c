@@ -1,17 +1,16 @@
 #include "symbols.h"
 
-#include <stdbool.h>
-#include <stdio.h>
-
 bool issymbol(char c) {
-    for (int n = 0; n < symbols_count; ++n) {
+    char symbols[] = {'(', ')', '[', ']', '{', '}', ',', '.',
+                      ':', ';', '=', '|', '&', '!', '<', '>',
+                      '^', '+', '-', '*', '/', '%', '@'};
+    for (int n = 0; n < 23; ++n) {
         if (c == symbols[n]) {
             return true;
         }
     }
     return false;
 }
-
 
 TokenType getonesymbol(char c1) {
     switch (c1) {

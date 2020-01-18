@@ -4,8 +4,6 @@
 #include "tokens.h"
 
 #include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 
 // private:
 Token *appendtoken(Token *   previous,

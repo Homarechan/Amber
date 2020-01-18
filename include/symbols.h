@@ -5,11 +5,6 @@
 
 #include <stdbool.h>
 
-
-char symbols[] = {'(', ')', '[', ']', '{', '}', ',', '.', ':', ';', '=', '|',
-                  '&', '!', '<', '>', '^', '+', '-', '*', '/', '%', '@'};
-int  symbols_count = 23;
-
 bool      issymbol(char c);
 TokenType getonesymbol(char c1);
 TokenType gettwosymbol(char c1, char c2);
