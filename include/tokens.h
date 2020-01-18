@@ -1,6 +1,9 @@
 #ifndef TOKENS_H_
 #define TOKENS_H_
 
+#include <stddef.h>
+
+
 typedef enum {
     // Words
     TK_Number,  // Number
@@ -70,7 +73,7 @@ struct Token_ {
     Token *   next;
     TokenType tktype;
     int       number;  // Use if TokenType == TK_Number
-    int       length;  // Length of string without '\0'
+    size_t    length;  // Length of string without '\0'
     char *    string;
 };
 
