@@ -41,10 +41,9 @@ Token *appendtoken_number(Token *token, char *src, int pointer) {
     int    result_number = strtol(tmp + pointer, &tmp, 10);
     size_t length        = tmp - src - pointer;
 
-    Token *new_token = appendtoken(
+    return appendtoken(
       token, NULL, TK_Number, result_number, length, src + pointer, false);
 
-    return new_token;
 }
 
 Token *appendtoken_symbol(Token *token, char *src, int pointer) {
@@ -80,8 +79,7 @@ Token *appendtoken_string(Token *token, char *src, int pointer) {
 }
 
 Token *appendtoken_eof(Token *token) {
-    Token *new_token = appendtoken(token, NULL, TK_EOF, 0, 0, "", false);
-    return new_token;
+    return appendtoken(token, NULL, TK_EOF, 0, 0, "", false);
 }
 
 Token base;
